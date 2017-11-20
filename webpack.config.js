@@ -22,7 +22,11 @@ var options = {
   entry: {
     popup: path.join(__dirname, "src", "js", "popup.js"),
     options: path.join(__dirname, "src", "js", "options.js"),
-    background: path.join(__dirname, "src", "js", "background.js")
+    background: path.join(__dirname, "src", "js", "background.js"),
+    parser: "./src/js/parser.js"
+  },
+  chromeExtensionBoilerplate: {
+    notHotReload: ["parser"]
   },
   output: {
     path: path.join(__dirname, "build"),
@@ -61,14 +65,14 @@ var options = {
       from: "src/manifest.json",
       transform: function (content, path) {
         // generates the manifest file using the package.json informations
-        return Buffer.from(JSON.stringify({
-          description: process.env.npm_package_description,
-          version: process.env.npm_package_version,
-          ...JSON.parse(content.toString())
-        }))
+        return Buffer.from(content.toString())
       }
-    }]),
-    new HtmlWebpackPlugin({
+    },
+    {from: 'src/img'},
+    {from: 'src/css'}
+    ]),
+
+      new HtmlWebpackPlugin({
       template: path.join(__dirname, "src", "popup.html"),
       filename: "popup.html",
       chunks: ["popup"]
@@ -77,11 +81,6 @@ var options = {
       template: path.join(__dirname, "src", "options.html"),
       filename: "options.html",
       chunks: ["options"]
-    }),
-    new HtmlWebpackPlugin({
-      template: path.join(__dirname, "src", "background.html"),
-      filename: "background.html",
-      chunks: ["background"]
     }),
     new WriteFilePlugin()
   ]

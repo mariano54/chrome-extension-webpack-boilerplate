@@ -1,16 +1,32 @@
 {
-  "name": "Chrome Extension Webpack",
+  "name": "Milo",
+  "version": "0.0.1",
   "options_page": "options.html",
   "background": {
-    "page": "background.html"
+    "scripts": ["background.bundle.js"]
   },
   "browser_action": {
     "default_popup": "popup.html",
-    "default_icon": "icon-34.png"
+    "default_icon": "icon.png",
+    "default_title": "Set up Milo!"
   },
   "icons": {
-    "128": "icon-128.png"
+    "128": "icon.png"
   },
   "manifest_version": 2,
-  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'"
+  "content_security_policy": "script-src 'self' 'unsafe-eval'; object-src 'self'",
+  "permissions": [
+    "activeTab",
+    "storage",
+    "http://www.google.com/",
+    "https://www.google.com/"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://www.google.com/flights/*"],
+      "js": ["parser.bundle.js"],
+      "css": ["parser.css"],
+      "run_at": "document_idle"
+    }
+  ]
 }
